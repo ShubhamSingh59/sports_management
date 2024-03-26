@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
 
-function App() {
-  // State to hold the fetched data
+function ALLDB() {
   const [data, setData] = useState([]);
 
-  const fetchData = async () => {
+  const fetchPlayerData = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/data');
       const jsonData = await response.json();
@@ -38,4 +36,8 @@ function App() {
   );
 }
 
-export default App;
+export default ALLDB;
+
+
+
+
