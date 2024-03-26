@@ -20,13 +20,24 @@ def index():
     return render_template('../frontend/public/index.html') 
 
 
-@app.route('/api/data', methods=['GET'])
+@app.route('/api/playerData', methods=['GET'])
 def get_data():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Player")  # Replace 'your_table' with your actual table name
     data = cur.fetchall()
     cur.close()
     return jsonify(data)
+
+@app.route('/api/sportsData')
+def get_sportsData():
+    cur = mysql.connection.cursor() 
+    cur.execute("select * from Sports")
+    sportsdata = cur.fetchall()
+    cur.close()
+    return jsonify(sportsdata)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

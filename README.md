@@ -17,7 +17,7 @@ For macOS and linux:
 source myvenv/bin/activate
 
 For Windows:
-myvenv\Scripts\activate
+myenv\Scripts\activate
 
 pip3 install Flask
 
