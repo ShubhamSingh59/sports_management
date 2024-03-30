@@ -1,0 +1,61 @@
+/* TableData.css */
+.table-container {
+    margin-top: 20px;
+  }
+  
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  .table-container th, .table-container td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table-container th {
+    background-color: #f2f2f2;
+  }
+  
+/* Add some space between the buttons */
+.button-container {
+  margin-top: 20px;
+}
+
+.button-container .insert-button {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+
+.button-container .delete-button {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.button-container .update-button {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+/* Table.css */
+
+/* Add this CSS to your existing Table.css or create a new CSS file */
+
+/* CSS to adjust the size of images in the table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table th, table td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+/* Adjust the size of images */
+table img {
+  width: 10%; /* You can adjust this percentage to your preference */
+  height: auto; /* Maintain aspect ratio */
+}
+
