@@ -14,8 +14,8 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
-app.config['MYSQL_USER'] = config.MYSQL_USER
-app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+#app.config['MYSQL_USER'] = config.MYSQL_USER
+#app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
 app.config['MYSQL_DB'] = config.MYSQL_DB
 app.config['SECRET_KEY'] = config.SECRET_KEY
 
@@ -115,8 +115,6 @@ def get_tables():
 
 
 @app.route('/api/insert', methods=['POST'])
-@jwt_required()
-@admin_required
 def insert_data():
     try:
         data = request.get_json()
@@ -243,7 +241,8 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-
+    app.config['MYSQL_USER'] = username
+    app.config['MYSQL_PASSWORD'] = password
     if not username or not password:
         return jsonify({'message': 'Username and password are required'}), 400
 
