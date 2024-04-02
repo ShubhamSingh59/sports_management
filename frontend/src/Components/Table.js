@@ -45,6 +45,7 @@ function TableData() {
         <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
         <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
         <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
+        <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
       </div>
 
       <table>

@@ -8,6 +8,7 @@ import Insert from './Components/Insert' ;
 import Delete from './Components/Delete';
 import Update from './Components/Update' ; 
 import Rename from './Components/Rename' ; 
+import Where from './Components/Where' ; 
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
           <Route path="/table/:tableName/delete" element={<Delete />} />
           <Route path="/table/:tableName/update" element={<Update />} />
           <Route path="/table/:tableName/rename" element={<Rename />} />
+          <Route path="/table/:tableName/where" element={<Where />} />
+          
         </Routes>
       </div>
        

@@ -17,7 +17,7 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('../frontend/public/index.html') 
+    return 'hello world'
 
 @app.route('/api/<table>', methods=['GET'])
 def get_data(table):
@@ -139,23 +139,31 @@ def rename_table():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/where', methods=['GET'])
-def get_data_with_where_clause():
+
+@app.route('/api/where', methods=['POST'])
+def apply_where_clause():
     try:
         data = request.get_json()
         table_name = data['table_name']
-        where_column = data['where_column']
-        where_value = data['where_value']
+        column_name = data['column_name']
+        operation = data['operation']
+        value = data['value']
+
+        # Ensure the operation is valid
+        valid_operations = ['=', '>', '<', '>=', '<=']
+        if operation not in valid_operations:
+            return jsonify({'error': 'Invalid operation'}), 400
 
         cursor = mysql.connection.cursor()
-        query = f"SELECT * FROM {table_name} WHERE {where_column} = %s"
-        cursor.execute(query, (where_value,))
-        data = cursor.fetchall()
+        query = f"SELECT * FROM {table_name} WHERE {column_name} {operation} %s"
+        cursor.execute(query, (value,))
+        result = cursor.fetchall()
         cursor.close()
 
-        return jsonify(data), 200
+        return jsonify({'data': result}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 if __name__ == '__main__':

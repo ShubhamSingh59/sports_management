@@ -37,6 +37,11 @@
   margin-right: 10px; /* Adjust the margin as needed */
 }
 
+.button-container .rename-button {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+
 /* Table.css */
 
 /* Add this CSS to your existing Table.css or create a new CSS file */
