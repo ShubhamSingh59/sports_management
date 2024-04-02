@@ -1,5 +1,3 @@
-// Delete.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/Delete.css';
@@ -13,11 +11,15 @@ function Delete() {
   const [selectedColumn, setSelectedColumn] = useState('');
   const [columns, setColumns] = useState([]);
 
-  // Fetch column names for the specified table
   useEffect(() => {
     const fetchColumns = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/${tableName}`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5000/api/${tableName}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         const jsonData = await response.json();
         const columns = jsonData.column_names;
         setColumns(columns);
@@ -36,10 +38,12 @@ function Delete() {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/delete', {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           table_name: tableName,
@@ -71,7 +75,6 @@ function Delete() {
       )}
       {showForm && (
         <form>
-          {/* Dropdown menu to select column */}
           <div>
             <label>Select Column:</label>
             <select value={selectedColumn} onChange={(e) => setSelectedColumn(e.target.value)}>
@@ -80,7 +83,6 @@ function Delete() {
               ))}
             </select>
           </div>
-          {/* Input field for the selected column */}
           <div>
             <label>{selectedColumn}</label>
             <input

@@ -1,5 +1,3 @@
-// Insert.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/Insert.css';
@@ -18,7 +16,15 @@ function Insert() {
 
   const fetchColumns = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/${tableName}`);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/${tableName}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch columns for table ${tableName}`);
+      }
       const jsonData = await response.json();
       setColumns(jsonData.column_names);
     } catch (error) {
@@ -33,10 +39,12 @@ function Insert() {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/insert', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           table_name: tableName,

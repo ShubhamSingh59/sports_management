@@ -1,5 +1,3 @@
-// RenameTable.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Rename.css';
@@ -19,10 +17,12 @@ function RenameTable() {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/rename', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           table_name: formData.tableName,

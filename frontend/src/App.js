@@ -9,7 +9,7 @@ import Delete from './Components/Delete';
 import Update from './Components/Update' ; 
 import Rename from './Components/Rename' ; 
 import Where from './Components/Where' ; 
-
+import Login from './Components/Login' ;
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
         </header>
         <div>
         <Routes> 
+          
           <Route exact path="/" element={<HomePage />} /> {/* Use element prop */}
           <Route path="/table/:tableName" element={<div> <TableData /> </div> } /> {/* Use element prop */}
           <Route path="/table/:tableName/insert" element={<Insert />} />
@@ -26,7 +27,7 @@ function App() {
           <Route path="/table/:tableName/update" element={<Update />} />
           <Route path="/table/:tableName/rename" element={<Rename />} />
           <Route path="/table/:tableName/where" element={<Where />} />
-          
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
        

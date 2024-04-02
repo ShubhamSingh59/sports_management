@@ -1,5 +1,3 @@
-// TableData.js
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import '../styles/Table.css';
@@ -14,25 +12,31 @@ function TableData() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/${tableName}`);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/${tableName}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for table ${tableName}`);
+      }
       const jsonData = await response.json();
       setData(jsonData.data);
     } catch (error) {
       console.error(`Error fetching data for table ${tableName}:`, error);
+      // Handle error, e.g., show error message to the user
     }
   };
 
   const renderCellValue = (value) => {
-    // Check if the value is a URL
     if (isValidUrl(value)) {
       return <img src={value} alt="Image" />;
     }
-    // If not a URL, render the value as text
     return value;
   };
 
   const isValidUrl = (value) => {
-    // Regular expression to check if the value is a valid URL
     const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlPattern.test(value);
   };
@@ -51,7 +55,6 @@ function TableData() {
       <table>
         <thead>
           <tr>
-            {/* Assuming the data structure is an array of objects */}
             {data.length > 0 &&
               Object.keys(data[0]).map((columnName) => (
                 <th key={columnName}>{columnName}</th>

@@ -17,7 +17,12 @@ function WhereClause() {
     useEffect(() => {
         const fetchColumns = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/${tableName}`);
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:5000/api/${tableName}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const jsonData = await response.json();
                 const columns = jsonData.column_names;
                 setColumns(columns);
@@ -32,10 +37,12 @@ function WhereClause() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:5000/api/where', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     table_name: tableName,

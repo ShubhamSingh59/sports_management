@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function HomePage() {
   const [tables, setTables] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchTables();
-  }, []);
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Redirect to login page if not authenticated
+      navigate('/login');
+    } else {
+      // Fetch tables data if authenticated
+      fetchTables();
+    }
+  }, [navigate]);
 
   const fetchTables = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/tables');
+      const response = await fetch('http://localhost:5000/api/tables', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch tables');
+      }
       const jsonData = await response.json();
-      setTables(jsonData); // Update to setTables(jsonData) instead of setTables(jsonData.tables)
+      setTables(jsonData);
     } catch (error) {
       console.error('Error fetching tables:', error);
+      // Handle error, e.g., show error message to the user
     }
   };
 

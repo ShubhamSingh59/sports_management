@@ -1,5 +1,3 @@
-// Update.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/Update.css';
@@ -18,7 +16,12 @@ function Update() {
   useEffect(() => {
     const fetchColumns = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/${tableName}`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:5000/api/${tableName}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         const jsonData = await response.json();
         const columns = jsonData.column_names;
         setColumns(columns);
@@ -37,10 +40,12 @@ function Update() {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/update', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           table_name: tableName,

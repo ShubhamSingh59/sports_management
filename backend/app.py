@@ -3,6 +3,11 @@ from flask_mysqldb import MySQL
 import config
 
 from flask_cors import CORS
+from functools import wraps
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+
+import jwt
+import datetime
 
 
 app = Flask(__name__)
@@ -12,14 +17,63 @@ app.config['MYSQL_HOST'] = config.MYSQL_HOST
 app.config['MYSQL_USER'] = config.MYSQL_USER
 app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
 app.config['MYSQL_DB'] = config.MYSQL_DB
+app.config['SECRET_KEY'] = config.SECRET_KEY
 
 mysql = MySQL(app)
+
+
+# Dummy user data (replace with your actual user database)
+users = {
+    'john@example.com': {'password': 'password123', 'role': 'user'},
+    'admin@example.com': {'password': 'admin123', 'role': 'admin'}
+}
+
+
+
+from functools import wraps
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        current_user = get_jwt_identity()
+    
+        if users[current_user]['role'] != 'admin':
+            # Handle unauthorized access
+            return jsonify({'message': 'Admin permission required, This user is not an admin'}), 403
+        
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def valid_token_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        current_user = get_jwt_identity()
+    
+        if users[current_user]['role'] not in ['admin', 'user']:
+            # Handle unauthorized access
+            return jsonify({'message': 'Invalid token, creditanls'}), 403
+        
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/api/admin', methods=['GET'])
+@jwt_required()
+@admin_required
+def admin_only_endpoint():
+    return jsonify({'message': 'Admin endpoint'}), 200
+
+
 
 @app.route('/')
 def index():
     return 'hello world'
 
+
+
 @app.route('/api/<table>', methods=['GET'])
+@jwt_required()
+@valid_token_required
 def get_data(table):
     try:
         cur = mysql.connection.cursor()
@@ -45,6 +99,8 @@ def get_data(table):
     
 
 @app.route('/api/tables', methods=['GET'])
+@jwt_required()
+@valid_token_required
 def get_tables():
     try:
         cursor = mysql.connection.cursor()
@@ -57,7 +113,10 @@ def get_tables():
 
 
 
+
 @app.route('/api/insert', methods=['POST'])
+@jwt_required()
+@admin_required
 def insert_data():
     try:
         data = request.get_json()
@@ -77,7 +136,10 @@ def insert_data():
         return jsonify({'error': str(e)}), 500
 
 
+
 @app.route('/api/update', methods=['PUT'])
+@jwt_required()
+@admin_required
 def update_data():
     try:
         data = request.get_json()
@@ -101,7 +163,11 @@ def update_data():
     
     
 # Update the /api/delete route to accept any combination of attribute values
+
+   
 @app.route('/api/delete', methods=['DELETE'])
+@jwt_required()
+@admin_required
 def delete_data():
     try:
         data = request.get_json()
@@ -122,7 +188,10 @@ def delete_data():
 
 
 
+
 @app.route('/api/rename', methods=['PUT'])
+@jwt_required()
+@admin_required 
 def rename_table():
     try:
         data = request.get_json()
@@ -141,6 +210,8 @@ def rename_table():
 
 
 @app.route('/api/where', methods=['POST'])
+@jwt_required()
+@admin_required
 def apply_where_clause():
     try:
         data = request.get_json()
@@ -163,6 +234,28 @@ def apply_where_clause():
         return jsonify({'data': result}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+jwt = JWTManager(app)
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required'}), 400
+
+    user = users.get(username)
+
+    if not user or user['password'] != password:
+        return jsonify({'message': 'Invalid username or password'}), 401
+
+    # Generate access token
+    access_token = create_access_token(identity=username)
+
+    return jsonify({'token': access_token}), 200
 
 
 
