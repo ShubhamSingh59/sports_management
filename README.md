@@ -20,24 +20,25 @@ npm install
 - **Clone the repository**
 - **Navigate to the backend directory and set up a virtual environment:**
 
-pip install virtualenv
-python3 -m venv myenv
+- pip install virtualenv
+- python3 -m venv myenv
 # For macOS and Linux:
-source myenv/bin/activate
+- source myenv/bin/activate
 # For Windows:
-myenv\Scripts\activate
+- myenv\Scripts\activate
 
 
-Install required Python packages:
-pip install Flask flask-mysqldb
+#### Install required Python packages:
+- pip install Flask flask-mysqldb
 
-Create a MySQL database using sports_management.sql
-Create a config.py file in the backend directory with the following content:
+#### Create a MySQL database using sports_management.sql
+#### Create a config.py file in the backend directory with the following content:
 # config.py
 MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root'  # Change this to your MySQL username
 MYSQL_PASSWORD = ''  # Change this to your MySQL password
 MYSQL_DB = 'sports_management'
+SECRET_KEY = "" # write your secret-key here 
 
 
 ### Usage
