@@ -39,7 +39,7 @@ CREATE TABLE Equipments (
     Equipment_Name VARCHAR(50),
     Sports_Name VARCHAR(50),
     Quantity INT,
-    Equipment_photo  LONGBLOB  ,
+    Equipment_photo  VARCHAR(244)  ,
     PRIMARY KEY (Equipment_Name, Sports_Name),
     FOREIGN KEY (Sports_Name) REFERENCES Sports(Sports_Name) ON DELETE CASCADE ON UPDATE CASCADE
 );
