@@ -34,19 +34,19 @@ npm install
 #### Create a MySQL database using sports_management.sql
 #### Create a config.py file in the backend directory with the following content:
 # config.py
-MYSQL_HOST = 'localhost'
-MYSQL_USER = 'root'  # Change this to your MySQL username
-MYSQL_PASSWORD = ''  # Change this to your MySQL password
-MYSQL_DB = 'sports_management'
-SECRET_KEY = "" # write your secret-key here 
+- MYSQL_HOST = 'localhost'
+- MYSQL_USER = 'root'  # Change this to your MySQL username
+- MYSQL_PASSWORD = ''  # Change this to your MySQL password
+- MYSQL_DB = 'sports_management'
+- SECRET_KEY = "" # write your secret-key here 
 
 
 ### Usage
-##### Run the backend:
-python app.py
+#### Run the backend:
+- python app.py
 
-##### Run the frontend:
-npm start
+#### Run the frontend:
+- npm start
 
 
 
