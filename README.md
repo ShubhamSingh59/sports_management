@@ -19,7 +19,6 @@ npm install
 - **Python 3**
 - **Clone the repository**
 - **Navigate to the backend directory and set up a virtual environment:**
-```bash
 
 pip install virtualenv
 python3 -m venv myenv
