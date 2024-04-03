@@ -24,7 +24,8 @@ mysql = MySQL(app)
 
 # Dummy user data (replace with your actual user database)
 users = {
-    'john@example.com': {'password': 'password123', 'role': 'user'},
+    'john@example.com': {'password': 'password123', 'role': 'player'},
+    'ram@gmail.com': {'password': 'sitaram', 'role': 'coach'},
     'admin@example.com': {'password': 'admin123', 'role': 'admin'}
 }
 
@@ -50,7 +51,7 @@ def valid_token_required(f):
     def decorated_function(*args, **kwargs):
         current_user = get_jwt_identity()
     
-        if users[current_user]['role'] not in ['admin', 'user']:
+        if users[current_user]['role'] not in ['admin', 'player', 'coach']:
             # Handle unauthorized access
             return jsonify({'message': 'Invalid token, creditanls'}), 403
         
@@ -115,6 +116,8 @@ def get_tables():
 
 
 @app.route('/api/insert', methods=['POST'])
+@jwt_required()
+@admin_required
 def insert_data():
     try:
         data = request.get_json()

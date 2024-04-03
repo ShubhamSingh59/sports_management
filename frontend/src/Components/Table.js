@@ -5,15 +5,17 @@ import '../styles/Table.css';
 function TableData() {
   const { tableName } = useParams();
   const [data, setData] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
 
   useEffect(() => {
     fetchData();
+    checkAdminStatus(); // Check if the user is an admin
   }, [tableName]);
 
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/${tableName}`, {
+      const response = await fetch(`http://localhost:5000/api/${tableName}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -26,6 +28,20 @@ function TableData() {
     } catch (error) {
       console.error(`Error fetching data for table ${tableName}:`, error);
       // Handle error, e.g., show error message to the user
+    }
+  };
+
+  const checkAdminStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/admin', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      setIsAdmin(response.ok); // Set isAdmin based on whether the user is an admin or not
+    } catch (error) {
+      console.error('Error checking admin status:', error);
     }
   };
 
@@ -44,13 +60,15 @@ function TableData() {
   return (
     <div className="table-container">
       <h1>{tableName}</h1>
-      <div className="button-container">
-        <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
-        <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
-        <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
-        <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
-        <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
-      </div>
+      {isAdmin && ( // Render buttons only if the user is an admin
+        <div className="button-container">
+          <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
+          <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
+          <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
+          <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
+          <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
+        </div>
+      )}
 
       <table>
         <thead>
