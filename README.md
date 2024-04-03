@@ -15,6 +15,7 @@ npm install
 - **MySQL Workbench:** [Install MySQL Workbench](https://www.mysql.com/products/workbench/)
 - **Python 3**
 - **Clone the repository**
+- Run the sport_management.sql and data_insertion.sql file in your mysql workbench 
 - **Navigate to the backend directory and set up a virtual environment:**
 
 - pip install virtualenv
