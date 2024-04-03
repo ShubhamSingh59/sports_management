@@ -1,7 +1,4 @@
-# sports_management
-
-## Introduction
-This project is a sports management application built with React.js for the frontend and Flask for the backend. It allows users to perform various operations related to sports management, such as viewing data, inserting, updating, and deleting records.
+# Sports_management
 
 ## Dependencies
 
