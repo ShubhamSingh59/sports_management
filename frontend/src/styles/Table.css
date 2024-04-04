@@ -74,14 +74,18 @@ table img {
 
 /* Style for the table */
 .table-container table {
-  width: 100%;
+  width: 40%;
   border-collapse: collapse;
+  margin: 0 auto;
+  border: 1px solid #1a1818; /* Add border */
+ 
 }
 
 /* Style for table headers and cells */
 .table-container th, .table-container td {
-  padding: 8px;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
+ 
 }
 
 /* Style for table headers */

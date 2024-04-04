@@ -1,24 +1,27 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Import Routes instead of Switch
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; 
+import { FaHome } from 'react-icons/fa'; // Import the home icon from react-icons
 import './App.css';
 
-import HomePage from './Components/Homepage' ; 
-import TableData from './Components/Table' ; 
-import Insert from './Components/Insert' ;
+import HomePage from './Components/Homepage'; 
+import TableData from './Components/Table'; 
+import Insert from './Components/Insert';
 import Delete from './Components/Delete';
 import Update from './Components/Update' ; 
 import Rename from './Components/Rename' ; 
 import Where from './Components/Where' ; 
 import Login from './Components/Login' ;
-import Signup from './Components/Signup' ; 
-
-
 function App() {
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          <h1>Sports Management Application</h1>
+          <nav className="navbar">
+            <Link to="/" className="home-link">
+              <FaHome className="home-icon" /> {/* Home icon */}
+            </Link>
+            <h1>Sports Management Application</h1>
+          </nav>
         </header>
         <div>
         <Routes> 
@@ -31,7 +34,6 @@ function App() {
           <Route path="/table/:tableName/rename" element={<Rename />} />
           <Route path="/table/:tableName/where" element={<Where />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
        

@@ -78,3 +78,84 @@
 .where-button:hover {
   background-color: #0056b3; /* Darken background color on hover */
 }
+
+
+/* Where.css */
+.where-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.where-container h2 {
+  color: #333;
+}
+
+.where-container form {
+  margin-bottom: 20px;
+}
+
+.where-container form div {
+  margin-bottom: 10px;
+}
+
+.where-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.where-container select,
+.where-container input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.where-container button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.where-container button:hover {
+  background-color: #0056b3;
+}
+
+.where-container p {
+  color: #dc3545;
+  margin-top: 10px;
+}
+
+.where-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.where-container th,
+.where-container td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.where-container th {
+  background-color: #f2f2f2;
+}
+
+.where-container tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.where-container tbody tr:nth-child(odd) {
+  background-color: white;
+}
+

@@ -1,13 +1,39 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Styling for the navigation bar */
+/* Styling for the navigation bar */
+/* Styling for the navigation bar */
+.navbar {
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  right: 0; /* Align to the right */
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: space-between; /* Distribute items evenly */
+  padding: 10px 20px; /* Padding */
+  background-color: #333;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+
+/* Styling for the home icon */
+.home-icon {
+  color: white;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+/* Styling for the home link */
+.home-link {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+/* Styling for the application header */
+.App-header h1 {
+  color: white;
+  margin: 0; /* Remove default margin */
+  text-align: center; /* Center-align text */
+  flex-grow: 1; /* Allow the header to grow and take up remaining space */
 }
