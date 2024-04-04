@@ -64,3 +64,17 @@
   color: #dc3545; /* Error message text color */
   margin-top: 10px; /* Add top margin */
 }
+/* Button styling */
+.where-button {
+  padding: 10px; /* Adjust padding */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border-radius: 4px; /* Button border radius */
+  cursor: pointer; /* Show pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Button hover effect */
+.where-button:hover {
+  background-color: #0056b3; /* Darken background color on hover */
+}

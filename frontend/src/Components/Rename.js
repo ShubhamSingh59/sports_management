@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Rename.css';
 
@@ -9,11 +9,23 @@ function RenameTable() {
     newTableName: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
+  const [renamed, setRenamed] = useState(false); // New state variable
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    if (renamed) {
+      const timer = setTimeout(() => {
+        setRenamed(false);
+        navigate('/');
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [renamed, navigate]);
 
   const handleSubmit = async () => {
     try {
@@ -39,7 +51,7 @@ function RenameTable() {
         throw new Error(data.error);
       }
 
-      navigate('/');
+      setRenamed(true); // Update status to trigger success message and page navigation
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -49,6 +61,7 @@ function RenameTable() {
     <div className="rename-container">
       <h2>Rename Table</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {renamed && <p style={{ color: 'green' }}>Table renamed successfully!</p>} {/* Display success message */}
       <form>
         <div>
           <label>Current Table Name:</label>
@@ -68,7 +81,7 @@ function RenameTable() {
             onChange={handleInputChange}
           />
         </div>
-        <button type="button" onClick={handleSubmit}>Rename Table</button>
+        <button  className="rename-button" type="button" onClick={handleSubmit}>Rename Table</button>
       </form>
     </div>
   );

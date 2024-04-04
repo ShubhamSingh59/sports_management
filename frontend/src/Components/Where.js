@@ -60,12 +60,12 @@ function WhereClause() {
     };
 
     return (
-        <div>
+        <div className="where-container">
             <h2>Apply Where Clause {tableName} </h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Select Column:</label>
-                    <select value={selectedColumn} onChange={(e) => setSelectedColumn(e.target.value)}>
+                    <label htmlFor="selectColumn">Select Column:</label>
+                    <select id="selectColumn" value={selectedColumn} onChange={(e) => setSelectedColumn(e.target.value)}>
                         {columns.map((column, index) => (
                             <option key={index} value={column}>{column}</option>
                         ))}
@@ -87,7 +87,7 @@ function WhereClause() {
                 </div>
                 <button type="submit">Apply Where Clause</button>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p>{error}</p>}
             {result.length > 0 && (
                 <div>
                     <h3>Results:</h3>

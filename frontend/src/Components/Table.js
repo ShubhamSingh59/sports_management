@@ -6,7 +6,7 @@ function TableData() {
   const { tableName } = useParams();
   const [data, setData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
-
+  const [columnsName, setColumns] = useState([]) ;
   useEffect(() => {
     fetchData();
     checkAdminStatus(); // Check if the user is an admin
@@ -25,6 +25,8 @@ function TableData() {
       }
       const jsonData = await response.json();
       setData(jsonData.data);
+      setColumns(jsonData.column_names) ;
+      console.log(columnsName);
     } catch (error) {
       console.error(`Error fetching data for table ${tableName}:`, error);
       // Handle error, e.g., show error message to the user
@@ -71,14 +73,15 @@ function TableData() {
       )}
 
       <table>
-        <thead>
-          <tr>
-            {data.length > 0 &&
-              Object.keys(data[0]).map((columnName) => (
-                <th key={columnName}>{columnName}</th>
-              ))}
-          </tr>
-        </thead>
+      <thead>
+        <tr>
+          {columnsName.length > 0 &&
+            columnsName.map((columnName, index) => ( // Use columnsName.map() here
+              <th key={index}>{columnName}</th> // Use columnName instead of columnsName
+            ))}
+        </tr>
+      </thead>
+
         <tbody>
           {data.map((row, index) => (
             <tr key={index}>

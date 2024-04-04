@@ -11,6 +11,7 @@ function Update() {
   const [columns, setColumns] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState('');
   const [updateValue, setUpdateValue] = useState('');
+  const [updated, setUpdated] = useState(false); // New state variable
 
   // Fetch column names for the specified table
   useEffect(() => {
@@ -32,6 +33,17 @@ function Update() {
     };
     fetchColumns();
   }, [tableName]);
+
+  useEffect(() => {
+    if (updated) {
+      const timer = setTimeout(() => {
+        setUpdated(false);
+        navigate(`/table/${tableName}`);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [updated, navigate, tableName]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +76,7 @@ function Update() {
         throw new Error(data.error);
       }
 
-      navigate(`/table/${tableName}`);
+      setUpdated(true); // Update status to trigger success message and page refresh
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -74,8 +86,9 @@ function Update() {
     <div className="update-container">
       <h2>Update Data in {tableName}</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {updated && <p style={{ color: 'green' }}>Data in {tableName} table updated successfully!</p>} {/* Display success message */}
       {!showForm && (
-        <button onClick={() => setShowForm(true)}>Update Data</button>
+        <button  className="insert-button" onClick={() => setShowForm(true)}>Update Data</button>
       )}
       {showForm && (
         <form>

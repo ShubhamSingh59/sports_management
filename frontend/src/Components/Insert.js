@@ -9,10 +9,22 @@ function Insert() {
   const [errorMessage, setErrorMessage] = useState('');
   const [columns, setColumns] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [inserted, setInserted] = useState(false); // New state variable
 
   useEffect(() => {
     fetchColumns();
   }, [tableName]);
+
+  useEffect(() => {
+    if (inserted) {
+      const timer = setTimeout(() => {
+        setInserted(false);
+        navigate(`/table/${tableName}`);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [inserted, navigate, tableName]);
 
   const fetchColumns = async () => {
     try {
@@ -62,7 +74,7 @@ function Insert() {
         throw new Error(data.error);
       }
 
-      navigate(`/table/${tableName}`);
+      setInserted(true); // Update insertion status
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -72,8 +84,9 @@ function Insert() {
     <div className="insert-container">
       <h2>Insert Data into {tableName}</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {inserted && <p style={{ color: 'green' }}>Data in {tableName} table inserted successfully!</p>} {/* Display success message */}
       {!showForm && (
-        <button onClick={() => setShowForm(true)}>Insert Data</button>
+        <button className="insert-button" onClick={() => setShowForm(true)}>Insert Data</button>
       )}
       {showForm && (
         <form>

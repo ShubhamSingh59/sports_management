@@ -64,3 +64,19 @@
 .rename-container form button:hover {
   background-color: #0056b3; /* Darken background color on hover */
 }
+
+
+/* Button styling */
+.rename-button {
+  padding: 10px; /* Adjust padding */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border-radius: 4px; /* Button border radius */
+  cursor: pointer; /* Show pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Button hover effect */
+.rename-button:hover {
+  background-color: #0056b3; /* Darken background color on hover */
+}

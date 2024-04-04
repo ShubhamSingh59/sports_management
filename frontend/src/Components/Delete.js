@@ -10,6 +10,7 @@ function Delete() {
   const [showForm, setShowForm] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState('');
   const [columns, setColumns] = useState([]);
+  const [deleted, setDeleted] = useState(false); // New state variable
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -30,6 +31,17 @@ function Delete() {
     };
     fetchColumns();
   }, [tableName]);
+
+  useEffect(() => {
+    if (deleted) {
+      const timer = setTimeout(() => {
+        setDeleted(false);
+        navigate(`/table/${tableName}`);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [deleted, navigate, tableName]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -60,7 +72,7 @@ function Delete() {
         throw new Error(data.error);
       }
 
-      navigate(`/table/${tableName}`);
+      setDeleted(true); // Update status to trigger success message and page refresh
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -70,8 +82,9 @@ function Delete() {
     <div className="delete-container">
       <h2>Delete Data from {tableName}</h2>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {deleted && <p style={{ color: 'green' }}>Data in {tableName} table deleted successfully!</p>} {/* Display success message */}
       {!showForm && (
-        <button onClick={() => setShowForm(true)}>Delete Data</button>
+        <button  className="delete-button" onClick={() => setShowForm(true)}>Delete Data</button>
       )}
       {showForm && (
         <form>
