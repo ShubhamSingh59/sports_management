@@ -61,7 +61,7 @@ function TableData() {
 
   return (
     <div className="table-container">
-  <h1>{tableName.toUpperCase()}</h1> {/* Convert tableName to uppercase */}
+  <h1>{tableName}</h1> {/* Convert tableName to uppercase */}
   {isAdmin && ( // Render buttons only if the user is an admin
     <div className="button-container">
       <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>

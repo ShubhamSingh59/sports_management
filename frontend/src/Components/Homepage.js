@@ -47,7 +47,7 @@ function HomePage() {
     {tables.map((table) => (
       <li key={table} className="table-link">
         <Link to={`/table/${table}`}>
-          {table.toUpperCase()} {/* Convert table name to uppercase */}
+          {table} {/* Convert table name to uppercase */}
         </Link>
       </li>
     ))}
