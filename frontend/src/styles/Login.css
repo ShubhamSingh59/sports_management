@@ -1,0 +1,76 @@
+/* Login.css */
+
+/* Apply background image to the body */
+
+
+/* Container styling */
+.login-container {
+    width: 400px;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.8); /* Light background color for login container */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Adding box-shadow for 3D effect */
+    border: 1px solid #ddd; /* Adding border for additional depth */
+    margin: 100px auto; /* Center the container horizontally and vertically */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack children vertically */
+    background-image: url('../../../image/img1.jpg'); /* Container background image */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background image */
+}
+
+/* Heading styling */
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Input field container */
+.input-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* Label styling */
+.login-container label {
+    flex: 1; /* Distribute space evenly among flex items */
+    margin-bottom: 12px; /* Increased margin-bottom for more space */
+    color: #555;
+}
+
+/* Input field styling */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    flex: 1; /* Take up equal space as labels */
+    padding: 3px; /* Reduce padding */
+    margin-left: 10px; /* Add some space between label and input */
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    max-width: 200px; /* Limit the maximum width of the input boxes */
+}
+
+/* Button styling */
+.login-container button {
+    width: 50%; /* Make button smaller */
+    padding: 8px; /* Reduce padding */
+    margin: 0 auto; /* Center the button horizontally */
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Add margin to separate from inputs */
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Error message styling */
+.login-error {
+    color: #dc3545;
+    margin-top: 10px;
+}

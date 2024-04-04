@@ -1,46 +1,67 @@
 /* Update.css */
 
+/* Container styling */
 .update-container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .update-container h2 {
-    margin-bottom: 20px;
-  }
-  
-  .update-container form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .update-container div {
-    margin-bottom: 10px;
-  }
-  
-  .update-container label {
-    margin-right: 10px;
-  }
-  
-  .update-container select, .update-container input[type="text"] {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 16px;
-  }
-  
-  .update-container button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .update-container button:hover {
-    background-color: #0056b3;
-  }
-  
+  width: 400px;
+  margin: 200px auto; /* Center the container horizontally */
+  padding: 20px;
+  background-image: url('../../../image/img1.jpg');
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background image */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+}
+
+/* Heading styling */
+.update-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333; /* Heading color */
+}
+
+/* Error message styling */
+.update-container p {
+  text-align: center;
+  color: red; /* Error message color */
+  margin-bottom: 10px;
+}
+
+/* Form styling */
+.update-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form field styling */
+.update-container form div {
+  margin-bottom: 10px; /* Add space between form fields */
+}
+
+/* Label styling */
+.update-container form label {
+  color: #555; /* Label text color */
+}
+
+/* Input field styling */
+.update-container form input[type="text"],
+.update-container form select {
+  padding: 8px; /* Adjust padding */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Border radius */
+}
+
+/* Button styling */
+.update-container form button {
+  padding: 10px; /* Adjust padding */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Button border radius */
+  cursor: pointer; /* Show pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Button hover effect */
+.update-container form button:hover {
+  background-color: #0056b3; /* Darken background color on hover */
+}

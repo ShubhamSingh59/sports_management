@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -25,9 +26,9 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
-      {error && <div>{error}</div>}
+      {error && <div className="login-error">{error}</div>}
       <div>
         <label>Username:</label>
         <input

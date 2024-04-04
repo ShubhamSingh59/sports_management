@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import '../styles/homepage.css';
 
 function HomePage() {
   const [tables, setTables] = useState([]);
@@ -38,7 +39,7 @@ function HomePage() {
   return (
     <div>
       <h1>Tables</h1>
-      <ul>
+      <ul className="table-list">
         {tables.map((table) => (
           <li key={table} className="table-link">
             <Link to={`/table/${table}`}>{table}</Link>

@@ -1,66 +1,66 @@
 /* TableData.css */
+body {
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  background-image: url('../../../image/img2.jpg'); /* Background image */
+  background-size: cover; /* Cover the entire page */
+  background-position: center; /* Center the background image */
+}
+/* Style for the table container */
 .table-container {
-    margin-top: 20px;
-  }
-  
-  .table-container table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-  }
-  
-  .table-container th, .table-container td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .table-container th {
-    background-color: #f2f2f2;
-  }
-  
-/* Add some space between the buttons */
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for 3D effect */
+}
+
+/* Style for the table */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Style for table headers and cells */
+.table-container th, .table-container td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style for table headers */
+.table-container th {
+  background-color: #f2f2f2;
+}
+
+/* Style for the button container */
 .button-container {
   margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align the buttons */
 }
 
-.button-container .insert-button {
-  margin-right: 10px; /* Adjust the margin as needed */
+/* Style for individual buttons */
+.button-container .insert-button,
+.button-container .delete-button,
+.button-container .update-button,
+.button-container .rename-button,
+.button-container .where-button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  border: none; /* Remove border */
+  border-radius: 8px;
+  background-color: black; /* Change background color to black */
+  color: white; /* Change text color to white */
+  text-decoration: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Add shadow for 3D effect */
+  transition: transform 0.3s ease;
 }
 
-
-.button-container .delete-button {
-  margin-right: 10px; /* Adjust the margin as needed */
+/* Hover effect for buttons */
+.button-container a:hover {
+  background-color: #333; /* Darken background color on hover */
+  transform: translateY(-3px); /* Move the button slightly up on hover */
 }
-
-.button-container .update-button {
-  margin-right: 10px; /* Adjust the margin as needed */
-}
-
-.button-container .rename-button {
-  margin-right: 10px; /* Adjust the margin as needed */
-}
-
-
-/* Table.css */
-
-/* Add this CSS to your existing Table.css or create a new CSS file */
-
-/* CSS to adjust the size of images in the table */
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-table th, table td {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-/* Adjust the size of images */
-table img {
-  width: 10%; /* You can adjust this percentage to your preference */
-  height: auto; /* Maintain aspect ratio */
-}
-

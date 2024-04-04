@@ -1,41 +1,68 @@
 /* Delete.css */
 
+/* Container styling */
 .delete-container {
-    margin-top: 20px;
-  }
+  width: 400px;
   
-  .delete-container h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .delete-container form {
-    margin-top: 20px;
-  }
-  
-  .delete-container label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .delete-container input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .delete-container button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .delete-container button:hover {
-    background-color: #0056b3;
-  }
-  
+  margin: 200px auto; /* Center the container horizontally */
+  padding: 20px;
+  background-image: url('../../../image/img1.jpg');
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background image */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+}
+
+/* Heading styling */
+.delete-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333; /* Heading color */
+}
+
+/* Error message styling */
+.delete-container p {
+  text-align: center;
+  color: red; /* Error message color */
+  margin-bottom: 10px;
+}
+
+/* Form styling */
+.delete-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form field styling */
+.delete-container form div {
+  margin-bottom: 10px; /* Add space between form fields */
+}
+
+/* Label styling */
+.delete-container form label {
+  color: #555; /* Label text color */
+}
+
+/* Select styling */
+.delete-container form select,
+.delete-container form input[type="text"] {
+  padding: 8px; /* Adjust padding */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Border radius */
+}
+
+/* Button styling */
+.delete-container form button {
+  padding: 10px; /* Adjust padding */
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Button border radius */
+  cursor: pointer; /* Show pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Button hover effect */
+.delete-container form button:hover {
+  background-color: #bb2d3b; /* Darken background color on hover */
+}

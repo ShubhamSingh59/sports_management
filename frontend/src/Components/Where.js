@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import '../styles/Where.css';
 
 function WhereClause() {
-    const navigate = useNavigate();
     const { tableName } = useParams();
-    const [columnName, setColumnName] = useState('');
     const [operation, setOperation] = useState('=');
     const [value, setValue] = useState('');
     const [result, setResult] = useState([]);

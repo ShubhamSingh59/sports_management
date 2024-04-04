@@ -1,0 +1,36 @@
+/* homepage.css */
+
+/* Table list styling */
+.table-list {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove default padding */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center-align list items */
+}
+
+/* Individual table item styling */
+.table-link {
+  margin-bottom: 5px; /* Add space between table items */
+}
+
+/* Link styling */
+.table-link a {
+  display: block; /* Make links block elements */
+  padding: 8px; /* Adjust padding */
+  background-color: #c0b7b7; /* Background color */
+  text-decoration: none; /* Remove underline */
+  border-radius: 4px; /* Add border radius */
+  color: #333; /* Link text color */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  border: 1px solid #ccc; /* Add border */
+  font-size: 14px; /* Adjust font size */
+  width: 150px; /* Adjust width */
+  text-align: center; /* Center the text horizontally */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for 3D effect */
+}
+
+/* Link hover effect */
+.table-link a:hover {
+  background-color: #e0e0e0; /* Darken background color on hover */
+}
