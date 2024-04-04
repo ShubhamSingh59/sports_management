@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/Login.css';
 
 function Signin() {
   const [username, setUsername] = useState('');
@@ -26,37 +27,30 @@ function Signin() {
   };
 
   return (
-    <div>
-      <h1>Create User</h1>
+    <div className="login-container"> {/* Apply the login-container class */}
+      <h2>Create User</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Role:
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <div className="input-container"> {/* Apply the input-container class */}
+          <label htmlFor="username">Username:</label>
+          <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+        </div>
+        <div className="input-container"> {/* Apply the input-container class */}
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        <div className="input-container"> {/* Apply the input-container class */}
+          <label htmlFor="role">Role:</label>
+          <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="">Select Role</option>
             <option value="Player">Player</option>
             <option value="Coach">Coach</option>
           </select>
-        </label>
-        <br />
-        <button type="submit">Create User</button>
+        </div>
+        <button type="submit" className="login-button">Create User</button> {/* Apply the login-button class */}
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="login-error">{error}</p>} {/* Apply the login-error class */}
     </div>
   );
 }
 
 export default Signin;
-
-
-
-

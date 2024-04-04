@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; 
-import { FaHome } from 'react-icons/fa'; // Import the home icon from react-icons
+import { FaHome, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import './App.css';
 
 import HomePage from './Components/Homepage'; 
@@ -18,12 +18,19 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <nav className="navbar">
-            <Link to="/" className="home-link">
-              <FaHome className="home-icon" /> {/* Home icon */}
-            </Link>
-            <h1>Sports Management Application</h1>
-          </nav>
+                
+      <nav className="navbar">
+        <Link to="/" className="home-link">
+          <FaHome className="home-icon" /> {/* Home icon */}
+        </Link>
+        <h1>Sports Management Application</h1>
+        <Link to="/login" className="home-link">
+          <FaSignInAlt className="login-icon" /> {/* Login icon */}
+        </Link>
+        <Link to="/signup" className="home-link">
+          <FaUserPlus className="signup-icon" /> {/* Signup icon */}
+        </Link>
+      </nav>
         </header>
         <div>
         <Routes> 

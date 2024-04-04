@@ -74,3 +74,31 @@
     color: #dc3545;
     margin-top: 10px;
 }
+
+
+/* Apply styles to the select element */
+select {
+    width: 100%; /* Make the select element full-width */
+    padding: 8px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 4px; /* Add border radius */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    font-size: 16px; /* Set font size */
+    color: #333; /* Set text color */
+    background-color: #fff; /* Set background color */
+  }
+  
+  /* Apply styles to the options inside the select element */
+  select option {
+    font-size: 16px; /* Set font size */
+    color: #333; /* Set text color */
+    background-color: #fff; /* Set background color */
+  }
+  
+  /* Apply styles to the select element when it's focused */
+  select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #007bff; /* Change border color when focused */
+    box-shadow: 0 0 3px #007bff; /* Add box shadow when focused */
+  }
+  

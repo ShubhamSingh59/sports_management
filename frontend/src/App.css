@@ -38,3 +38,34 @@
   display: flex;
   align-items: center;
 }
+
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #333;
+}
+
+.home-link,
+.login-link,
+.signup-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  padding: 5px 10px; /* Adjust padding as needed */
+}
+
+.home-link:hover,
+.login-link:hover,
+.signup-link:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Add hover effect */
+}
+
+.home-icon,
+.login-icon,
+.signup-icon {
+  margin-right: 5px; /* Add space between icon and text */
+}
