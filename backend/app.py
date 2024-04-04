@@ -21,42 +21,69 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 
 mysql = MySQL(app)
 
-
+""" 
 # Dummy user data (replace with your actual user database)
 users = {
     'john@example.com': {'password': 'password123', 'role': 'player'},
     'ram@gmail.com': {'password': 'sitaram', 'role': 'coach'},
     'admin@example.com': {'password': 'admin123', 'role': 'admin'}
 }
+"""
+def set_mysql_credentials(user, password):
+    app.config['MYSQL_USER'] = user
+    app.config['MYSQL_PASSWORD'] = password
 
 
+def dict_cursor(cursor):
+    # Fetch the column names for the cursor
+    columns = [column[0] for column in cursor.description]
 
-from functools import wraps
+    # Fetch all rows from the cursor
+    rows = cursor.fetchall()
+
+    # Convert each row into a dictionary
+    result = []
+    for row in rows:
+        result.append({columns[i]: row[i] for i in range(len(columns))})
+    
+    return result
 
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         current_user = get_jwt_identity()
-    
-        if users[current_user]['role'] != 'admin':
+        
+        # Fetch user data from the database
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT role FROM Users WHERE username = %s", (current_user,))
+        user = dict_cursor(cursor)
+        cursor.close()
+
+        if not user or user[0]['role'] != 'admin':
             # Handle unauthorized access
             return jsonify({'message': 'Admin permission required, This user is not an admin'}), 403
         
         return f(*args, **kwargs)
     return decorated_function
 
-
 def valid_token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         current_user = get_jwt_identity()
-    
-        if users[current_user]['role'] not in ['admin', 'player', 'coach']:
+        
+        # Fetch user data from the database
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT role FROM Users WHERE username = %s", (current_user,))
+        user = dict_cursor(cursor)
+        cursor.close()
+
+        if not user or user[0]['role'] not in ['admin', 'Player', 'Coach']:
             # Handle unauthorized access
-            return jsonify({'message': 'Invalid token, creditanls'}), 403
+            return jsonify({'message': 'Invalid token, credentials'}), 403
         
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route('/api/admin', methods=['GET'])
 @jwt_required()
@@ -100,13 +127,12 @@ def get_data(table):
     
 
 @app.route('/api/tables', methods=['GET'])
-@jwt_required()
-@valid_token_required
 def get_tables():
     try:
         cursor = mysql.connection.cursor()
-        cursor.execute("SHOW TABLES")
-        tables = [table[0] for table in cursor.fetchall()]
+        cursor.execute ("SELECT table_name FROM information_schema.tables WHERE table_schema = 'sports_management' AND table_name != 'Users'") 
+        #cursor.execute("SHOW TABLES")
+        tables = cursor.fetchall()
         cursor.close()
         return jsonify(tables)
     except Exception as e:
@@ -238,7 +264,7 @@ def apply_where_clause():
 
 
 jwt = JWTManager(app)
-
+""" 
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -258,8 +284,112 @@ def login():
     access_token = create_access_token(identity=username)
 
     return jsonify({'token': access_token}), 200
+"""
 
 
+
+@app.route('/api/create_user', methods=['POST'])
+def create_user():
+    try:
+        app.config['MYSQL_USER'] = config.MYSQL_USER
+        app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+        cur = mysql.connection.cursor()
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+        role = data.get('role')  # Get the role from the request data
+
+        
+        cur.execute("CREATE USER %s@'localhost' IDENTIFIED BY %s", (username, password))
+        
+        # Grant different table access based on the role
+        if role == 'Player':
+            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+
+            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (username,))
+            mysql.connection.commit() 
+        elif role == 'Coach':
+            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (username,))
+            mysql.connection.commit()
+            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (username,))
+            mysql.connection.commit() 
+        else:
+            # Handle invalid role
+            return jsonify({'error': 'Invalid role'}), 400
+        
+        # Insert user details into the Users table
+        cur.execute("INSERT INTO Users (username, password, role) VALUES (%s, %s, %s)", (username, password, role))
+        mysql.connection.commit() 
+        cur.close()
+
+        return jsonify({"message": "User created successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/login', methods=['POST'])
+def Login():
+    try:
+        #set_mysql_credentials('root', 'Stromer/2003')
+        username = request.json.get('username')
+        password = request.json.get('password')
+        set_mysql_credentials(username, password)
+        cur = mysql.connection.cursor()
+        # Check if the user exists in the users table
+        cur.execute("SELECT * FROM Users WHERE username = %s AND password = %s", (username, password))
+        mysql.connection.commit() 
+        user_data = cur.fetchone()
+        print(user_data)
+        #cur.close()
+        if user_data:
+            # Set MySQL credential
+            cur = mysql.connection.cursor()
+            # Execute "SHOW TABLES" query
+            # cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'sports_management' AND table_name != 'Users'")
+            mysql.connection.commit() 
+            # tables = cur.fetchall()
+            #print(tables)
+            cur.close()
+            access_token = create_access_token(identity=username)
+            return jsonify({'token': access_token}), 200
+        else:
+            return jsonify({'success': False, 'error': 'Invalid credentials'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': 'Please Sign'})
 
 if __name__ == '__main__':
     app.run(debug=True)

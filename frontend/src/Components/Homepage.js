@@ -25,11 +25,15 @@ function HomePage() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if (!response.ok) {
+      if (response.ok) {
+        
+        const jsonData = await response.json();
+        setTables(jsonData);
+      }
+      else{
         throw new Error('Failed to fetch tables');
       }
-      const jsonData = await response.json();
-      setTables(jsonData);
+      
     } catch (error) {
       console.error('Error fetching tables:', error);
       // Handle error, e.g., show error message to the user

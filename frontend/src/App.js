@@ -10,6 +10,9 @@ import Update from './Components/Update' ;
 import Rename from './Components/Rename' ; 
 import Where from './Components/Where' ; 
 import Login from './Components/Login' ;
+import Signup from './Components/Signup' ; 
+
+
 function App() {
   return (
     <Router>
@@ -28,6 +31,7 @@ function App() {
           <Route path="/table/:tableName/rename" element={<Rename />} />
           <Route path="/table/:tableName/where" element={<Where />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
        
