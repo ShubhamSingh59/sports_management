@@ -38,15 +38,18 @@ function HomePage() {
 
   return (
     <div>
-      <h1>Tables</h1>
-      <ul className="table-list">
-        {tables.map((table) => (
-          <li key={table} className="table-link">
-            <Link to={`/table/${table}`}>{table}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+  <h1>Tables</h1>
+  <ul className="table-list">
+    {tables.map((table) => (
+      <li key={table} className="table-link">
+        <Link to={`/table/${table}`}>
+          {table.toUpperCase()} {/* Convert table name to uppercase */}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
+
   );
 }
 

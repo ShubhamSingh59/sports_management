@@ -61,15 +61,18 @@ function TableData() {
 
   return (
     <div className="table-container">
-      <h1>{tableName}</h1>
-      {isAdmin && ( // Render buttons only if the user is an admin
-        <div className="button-container">
-          <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
-          <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
-          <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
-          <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
-          <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
-        </div>
+  <h1>{tableName.toUpperCase()}</h1> {/* Convert tableName to uppercase */}
+  {isAdmin && ( // Render buttons only if the user is an admin
+    <div className="button-container">
+      <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
+      <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
+      <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
+      <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
+      <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
+    </div>
+
+
+
       )}
 
       <table>

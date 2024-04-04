@@ -89,15 +89,29 @@ function WhereClause() {
             </form>
             {error && <p>{error}</p>}
             {result.length > 0 && (
-                <div>
-                    <h3>Results:</h3>
-                    <ul>
-                        {result.map((item, index) => (
-                            <li key={index}>{JSON.stringify(item)}</li>
+    <div>
+        <h3>Results:</h3>
+        <table className="result-table">
+            <thead>
+                <tr>
+                    {Object.keys(result[0]).map((key) => (
+                        <th key={key}>{key}</th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                {result.map((item, index) => (
+                    <tr key={index}>
+                        {Object.entries(item).map(([key, value]) => (
+                            <td key={key}>{JSON.stringify(value)}</td>
                         ))}
-                    </ul>
-                </div>
-            )}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+)}
+
         </div>
     );
 }
