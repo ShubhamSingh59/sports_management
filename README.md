@@ -37,7 +37,12 @@ npm install
 - MYSQL_PASSWORD = ''  # Change this to your MySQL password
 - MYSQL_DB = 'sports_management'
 - SECRET_KEY = "" # write your secret-key here 
+To create an admin in your database, use the code below: 
+- INSERT INTO Users(username, password, role) VALUES ('Admin1', 'Admin123','admin');
 
+create user 'Admin1' identified by 'Admin123';
+for giving permissions to admin, use the below line: 
+- GRANT INSERT, UPDATE, DELETE, select ON sports_management.* to 'Admin1';
 
 ### Usage
 #### Run the backend:
