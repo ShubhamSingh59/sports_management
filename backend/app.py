@@ -55,7 +55,7 @@ def admin_required(f):
         
         # Fetch user data from the database
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT role FROM Users WHERE username = %s", (current_user,))
+        cursor.execute("SELECT role FROM Users WHERE useremail = %s", (current_user,))
         user = dict_cursor(cursor)
         cursor.close()
 
@@ -73,7 +73,7 @@ def valid_token_required(f):
         
         # Fetch user data from the database
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT role FROM Users WHERE username = %s", (current_user,))
+        cursor.execute("SELECT role FROM Users WHERE useremail = %s", (current_user,))
         user = dict_cursor(cursor)
         cursor.close()
 
@@ -264,28 +264,6 @@ def apply_where_clause():
 
 
 jwt = JWTManager(app)
-""" 
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    app.config['MYSQL_USER'] = username
-    app.config['MYSQL_PASSWORD'] = password
-    if not username or not password:
-        return jsonify({'message': 'Username and password are required'}), 400
-
-    user = users.get(username)
-
-    if not user or user['password'] != password:
-        return jsonify({'message': 'Invalid username or password'}), 401
-
-    # Generate access token
-    access_token = create_access_token(identity=username)
-
-    return jsonify({'token': access_token}), 200
-"""
-
 
 
 @app.route('/api/create_user', methods=['POST'])
@@ -295,63 +273,63 @@ def create_user():
         app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
         cur = mysql.connection.cursor()
         data = request.get_json()
-        username = data['username']
+        useremail = data['useremail']
         password = data['password']
         role = data.get('role')  # Get the role from the request data
 
         
-        cur.execute("CREATE USER %s@'localhost' IDENTIFIED BY %s", (username, password))
+        cur.execute("CREATE USER %s@'localhost' IDENTIFIED BY %s", (useremail, password))
         
         # Grant different table access based on the role
         if role == 'Player':
-            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
 
-            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (useremail,))
             mysql.connection.commit() 
         elif role == 'Coach':
-            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Coach TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Competition TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.guide_of TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Matches TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Participate TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Player TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Sports TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Team TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Tournament TO %s@'localhost'", (useremail,))
             mysql.connection.commit()
-            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (username,))
+            cur.execute("GRANT SELECT ON sports_management.Users TO %s@'localhost'", (useremail,))
             mysql.connection.commit() 
         else:
             # Handle invalid role
             return jsonify({'error': 'Invalid role'}), 400
         
         # Insert user details into the Users table
-        cur.execute("INSERT INTO Users (username, password, role) VALUES (%s, %s, %s)", (username, password, role))
+        cur.execute("INSERT INTO Users (useremail, password, role) VALUES (%s, %s, %s)", (useremail, password, role))
         mysql.connection.commit() 
         cur.close()
 
@@ -364,12 +342,12 @@ def create_user():
 def Login():
     try:
         #set_mysql_credentials('root', 'Stromer/2003')
-        username = request.json.get('username')
+        useremail = request.json.get('useremail')
         password = request.json.get('password')
-        set_mysql_credentials(username, password)
+        set_mysql_credentials(useremail, password)
         cur = mysql.connection.cursor()
         # Check if the user exists in the users table
-        cur.execute("SELECT * FROM Users WHERE username = %s AND password = %s", (username, password))
+        cur.execute("SELECT * FROM Users WHERE useremail = %s AND password = %s", (useremail, password))
         mysql.connection.commit() 
         user_data = cur.fetchone()
         print(user_data)
@@ -383,7 +361,7 @@ def Login():
             # tables = cur.fetchall()
             #print(tables)
             cur.close()
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=useremail)
             return jsonify({'token': access_token}), 200
         else:
             return jsonify({'success': False, 'error': 'Invalid credentials'})

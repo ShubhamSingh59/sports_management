@@ -3,14 +3,41 @@ import axios from 'axios';
 import '../styles/Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [useremail, setUseremail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
     try {
+      // Password validation
+      const lowerCaseRegex = /[a-z]/;
+      const upperCaseRegex = /[A-Z]/;
+      const numericRegex = /\d/;
+      const minLength = 8;
+
+      if (!lowerCaseRegex.test(password)) {
+        setError('Password should contain at least one lowercase letter.');
+        return;
+      }
+
+      if (!upperCaseRegex.test(password)) {
+        setError('Password should contain at least one uppercase letter.');
+        return;
+      }
+
+      if (!numericRegex.test(password)) {
+        setError('Password should contain at least one numeric digit.');
+        return;
+      }
+
+      if (password.length < minLength) {
+        setError(`Password should have a minimum length of ${minLength} characters.`);
+        return;
+      }
+
+      // API call to login
       const response = await axios.post('http://localhost:5000/api/login', {
-        username: username,
+        useremail: useremail,
         password: password
       });
 
@@ -30,11 +57,11 @@ const Login = () => {
       <h2>Login</h2>
       {error && <div className="login-error">{error}</div>}
       <div>
-        <label>Username:</label>
+        <label>Email:</label>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={useremail}
+          onChange={(e) => setUseremail(e.target.value)}
         />
       </div>
       <div>
