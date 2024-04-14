@@ -10,6 +10,37 @@ function WhereClause() {
     const [error, setError] = useState('');
     const [columns, setColumns] = useState([]);
     const [selectedColumn, setSelectedColumn] = useState('');
+    
+  const columnRegex = {
+    Coach_ID: /^\d+$/, // int
+    First_Name: /^[a-zA-Z\s]+$/,
+    Last_Name: /^[a-zA-Z\s]+$/,
+    DOB: /^\d{4}-\d{2}-\d{2}$/, // date
+    Gender: /^[MF]$/,
+    Mobile: /^\d{10}$/,
+    Email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    Experience: /^\d+$/, // int
+    Qualification: /.*/,
+    Salary: /^\d+(\.\d{1,2})?$/, // decimal
+    Sports_Name: /^[a-zA-Z\s]+$/,
+    Player_ID: /^\d+$/, // int
+    Equipment_Name: /.*/,
+    Date_Time: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, // datetime format
+    Quantity: /^\d+$/,
+    Return_Status: /.*/,
+    Equipment_photo: /.*/,
+    Team_ID: /^\d+$/, // int
+    Team_Name: /.*/,
+    Captain_ID: /^\d+$/, // int
+    Tournament_ID: /^\d+$/, // int
+    Tournament_Name: /.*/,
+    Start_Date: /^\d{4}-\d{2}-\d{2}$/, // date
+    End_Date: /^\d{4}-\d{2}-\d{2}$/, // date
+    Venue: /.*/,
+    Winner_Team_ID: /^\d+$/, // int
+    Match_ID: /^\d+$/, // int
+    Winner_ID: /^\d+$/ // int
+  };
 
     // Fetch column names for the specified table
     useEffect(() => {
@@ -33,8 +64,17 @@ function WhereClause() {
     }, [tableName]);
 
     const handleSubmit = async (e) => {
+        setError('') ; 
+        setResult([]); 
         e.preventDefault();
         try {
+            const regexPattern = columnRegex[selectedColumn];
+    
+            // Validate input value only if a regex pattern exists for the selected column
+            if (regexPattern && !regexPattern.test(value)) {
+                throw new Error(`Invalid input for column ${selectedColumn}.`);
+            }
+    
             const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:5000/api/where', {
                 method: 'POST',
@@ -87,11 +127,12 @@ function WhereClause() {
                 </div>
                 <button type="submit">Apply Where Clause</button>
             </form>
-            {error && <p>{error}</p>}
-            {result.length > 0 && (
-    <div>
-        <h3>Results:</h3>
-        <table className="result-table">
+
+           
+            {result.length > 0 ? (
+                <div>
+                    <h3>Results:</h3>
+                    <table className="result-table">
             <thead>
                 <tr>
                     {Object.keys(result[0]).map((key) => (
@@ -109,9 +150,12 @@ function WhereClause() {
                 ))}
             </tbody>
         </table>
-    </div>
-)}
-
+                </div>
+            ) : (
+                <p>No data found for the provided condition.</p>
+            )}
+           
+          
         </div>
     );
 }

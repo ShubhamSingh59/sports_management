@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/Login.css';
 
-function Signin() {
-  const [username, setUsername] = useState('');
+function Signup() {
+  const [useremail, setUseremail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [error, setError] = useState('');
@@ -11,7 +11,40 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/create_user', { username, password, role });
+      // Simple email validation using regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(useremail)) {
+        setError('Invalid email format');
+        return;
+      }
+
+      // Password validation
+      const lowerCaseRegex = /[a-z]/;
+      const upperCaseRegex = /[A-Z]/;
+      const numericRegex = /\d/;
+      const minLength = 8;
+
+      if (!lowerCaseRegex.test(password)) {
+        setError('Password should contain at least one lowercase letter.');
+        return;
+      }
+
+      if (!upperCaseRegex.test(password)) {
+        setError('Password should contain at least one uppercase letter.');
+        return;
+      }
+
+      if (!numericRegex.test(password)) {
+        setError('Password should contain at least one numeric digit.');
+        return;
+      }
+
+      if (password.length < minLength) {
+        setError(`Password should have a minimum length of ${minLength} characters.`);
+        return;
+      }
+
+      const response = await axios.post('http://localhost:5000/api/create_user', { useremail, password, role });
       alert('User created successfully');
     } catch (error) {
       if (error.response) {
@@ -27,18 +60,18 @@ function Signin() {
   };
 
   return (
-    <div className="login-container"> {/* Apply the login-container class */}
+    <div className="login-container">
       <h2>Create User</h2>
       <form onSubmit={handleSubmit}>
-        <div className="input-container"> {/* Apply the input-container class */}
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <div className="input-container">
+          <label htmlFor="useremail">Email:</label>
+          <input type="text" id="useremail" value={useremail} onChange={(e) => setUseremail(e.target.value)} />
         </div>
-        <div className="input-container"> {/* Apply the input-container class */}
+        <div className="input-container">
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        <div className="input-container"> {/* Apply the input-container class */}
+        <div className="input-container">
           <label htmlFor="role">Role:</label>
           <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="">Select Role</option>
@@ -46,11 +79,11 @@ function Signin() {
             <option value="Coach">Coach</option>
           </select>
         </div>
-        <button type="submit" className="login-button">Create User</button> {/* Apply the login-button class */}
+        <button type="submit" className="login-button">Create User</button>
       </form>
-      {error && <p className="login-error">{error}</p>} {/* Apply the login-error class */}
+      {error && <p className="login-error">{error}</p>}
     </div>
   );
 }
 
-export default Signin;
+export default Signup;

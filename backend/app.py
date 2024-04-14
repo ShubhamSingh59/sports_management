@@ -163,7 +163,6 @@ def insert_data():
         return jsonify({'error': str(e)}), 500
 
 
-
 @app.route('/api/update', methods=['PUT'])
 @jwt_required()
 @admin_required
@@ -179,19 +178,25 @@ def update_data():
         where_clause = ' AND '.join([f"{column} = %s" for column in where_values.keys()])
 
         cursor = mysql.connection.cursor()
-        query = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
-        cursor.execute(query, tuple(update_values + list(where_values.values())))
+        select_query = f"SELECT * FROM {table_name} WHERE {where_clause}"
+        cursor.execute(select_query, tuple(where_values.values()))
+        rows = cursor.fetchall()
+
+        if not rows:
+            return jsonify({'error': 'No entry found for updating'}), 404
+
+        update_query = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
+        cursor.execute(update_query, tuple(update_values + list(where_values.values())))
         mysql.connection.commit()
         cursor.close()
 
         return jsonify({'message': 'Data updated successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
     
 # Update the /api/delete route to accept any combination of attribute values
 
-   
 @app.route('/api/delete', methods=['DELETE'])
 @jwt_required()
 @admin_required
@@ -199,13 +204,20 @@ def delete_data():
     try:
         data = request.get_json()
         table_name = data['table_name']
-        where_values = data['where_values']  # Change from 'primary_key' to 'where_values'
+        where_values = data['where_values']
 
         where_clause = ' AND '.join([f"{column} = %s" for column in where_values.keys()])
 
         cursor = mysql.connection.cursor()
-        query = f"DELETE FROM {table_name} WHERE {where_clause}"
+        query = f"SELECT * FROM {table_name} WHERE {where_clause}"
         cursor.execute(query, tuple(where_values.values()))
+        rows = cursor.fetchall()
+
+        if not rows:
+            return jsonify({'message': 'No data found'}), 200
+
+        delete_query = f"DELETE FROM {table_name} WHERE {where_clause}"
+        cursor.execute(delete_query, tuple(where_values.values()))
         mysql.connection.commit()
         cursor.close()
 
@@ -236,6 +248,19 @@ def rename_table():
         return jsonify({'error': str(e)}), 500
 
 
+# Route to fetch column types for a given table
+@app.route('/api/columns/<table_name>')
+@jwt_required()
+def get_table_columns(table_name):
+    try:
+        cursor = mysql.connection.cursor()
+        # Fetch column names and types from information_schema
+        cursor.execute(f"SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table_name}'")
+        columns = cursor.fetchall()
+        return jsonify(columns)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/where', methods=['POST'])
 @jwt_required()
 @admin_required
@@ -258,9 +283,13 @@ def apply_where_clause():
         result = cursor.fetchall()
         cursor.close()
 
+        if not result:
+            return jsonify({'message': 'No data found for the provided condition.'}), 404
+
         return jsonify({'data': result}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 jwt = JWTManager(app)
@@ -338,6 +367,8 @@ def create_user():
         return jsonify({"error": str(e)}), 500
 
 
+
+
 @app.route('/api/login', methods=['POST'])
 def Login():
     try:
@@ -362,7 +393,7 @@ def Login():
             #print(tables)
             cur.close()
             access_token = create_access_token(identity=useremail)
-            return jsonify({'token': access_token}), 200
+            return jsonify({'token': access_token,'success': True}), 200
         else:
             return jsonify({'success': False, 'error': 'Invalid credentials'})
         

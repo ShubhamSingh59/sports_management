@@ -14,7 +14,11 @@ const Login = () => {
       const upperCaseRegex = /[A-Z]/;
       const numericRegex = /\d/;
       const minLength = 8;
-
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(useremail)) {
+        setError('Invalid email format');
+        return;
+      }
       if (!lowerCaseRegex.test(password)) {
         setError('Password should contain at least one lowercase letter.');
         return;
@@ -40,13 +44,17 @@ const Login = () => {
         useremail: useremail,
         password: password
       });
-
+      console.log(response.data.success);
+      if(response.data.success === false){
+        setError("we couldn't find your credianls in our system, Please login via correct email, password") ; 
+        return ; 
+      }
       const token = response.data.token;
       // Store the token in local storage or session storage
       localStorage.setItem('token', token);
       // Redirect to the desired page after successful login
       // You can replace '/dashboard' with the URL of your dashboard page
-      window.location.href = '/';
+     window.location.href = '/';
     } catch (error) {
       setError(error.response.data.message);
     }

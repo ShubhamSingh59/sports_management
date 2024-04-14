@@ -11,6 +11,39 @@ function Insert() {
   const [showForm, setShowForm] = useState(false);
   const [inserted, setInserted] = useState(false); // New state variable
 
+    
+  const columnRegex = {
+    Coach_ID: /^\d+$/, // int
+    First_Name: /^[a-zA-Z\s]+$/,
+    Last_Name: /^[a-zA-Z\s]+$/,
+    DOB: /^\d{4}-\d{2}-\d{2}$/, // date
+    Gender: /^[MF]$/,
+    Mobile: /^\d{10}$/,
+    Email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    Experience: /^\d+$/, // int
+    Qualification: /.*/,
+    Salary: /^\d+(\.\d{1,2})?$/, // decimal
+    Sports_Name: /^[a-zA-Z\s]+$/,
+    Player_ID: /^\d+$/, // int
+    Equipment_Name: /.*/,
+    Date_Time: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/, // datetime format
+    Quantity: /^\d+$/,
+    Return_Status: /.*/,
+    Equipment_photo: /.*/,
+    Team_ID: /^\d+$/, // int
+    Team_Name: /.*/,
+    Captain_ID: /^\d+$/, // int
+    Tournament_ID: /^\d+$/, // int
+    Tournament_Name: /.*/,
+    Start_Date: /^\d{4}-\d{2}-\d{2}$/, // date
+    End_Date: /^\d{4}-\d{2}-\d{2}$/, // date
+    Venue: /.*/,
+    Winner_Team_ID: /^\d+$/, // int
+    Match_ID: /^\d+$/, // int
+    Winner_ID: /^\d+$/ // int
+  };
+
+
   useEffect(() => {
     fetchColumns();
   }, [tableName]);
@@ -51,6 +84,15 @@ function Insert() {
 
   const handleSubmit = async () => {
     try {
+      // Validation
+      setErrorMessage('');
+      for (const column in rowData) {
+        if (columnRegex.hasOwnProperty(column)) {
+          if (!columnRegex[column].test(rowData[column])) {
+            throw new Error(`Invalid value for column ${column}`);
+          }
+        }
+      }
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/insert', {
         method: 'POST',
@@ -64,7 +106,6 @@ function Insert() {
           data: [Object.values(rowData)]
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to insert data.');
       }
@@ -75,6 +116,8 @@ function Insert() {
       }
 
       setInserted(true); // Update insertion status
+    
+      // Rest of the code for submitting data to the server
     } catch (error) {
       setErrorMessage(error.message);
     }

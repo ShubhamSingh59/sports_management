@@ -10,7 +10,7 @@ function RenameTable() {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [renamed, setRenamed] = useState(false); // New state variable
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -29,6 +29,7 @@ function RenameTable() {
 
   const handleSubmit = async () => {
     try {
+      setErrorMessage('');
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/rename', {
         method: 'PUT',
