@@ -151,9 +151,12 @@ function WhereClause() {
             </tbody>
         </table>
                 </div>
-            ) : (
-                <p>No data found for the provided condition.</p>
-            )}
+            ) :  (
+            /* Display nothing if the form has not been submitted */
+            (error !== '' && value !== '' && <p>No data found for the provided condition.</p>)
+           
+
+        )}
            
           
         </div>

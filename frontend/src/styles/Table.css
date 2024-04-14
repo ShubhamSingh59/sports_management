@@ -101,3 +101,23 @@ table img {
 .table-container tbody tr:nth-child(odd) {
   background-color: white; /* White background for odd rows */
 }
+
+
+/* styles/SearchButton.css */
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-container input[type="text"] {
+  width: 18%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.search-container input[type="text"]:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.1);
+}

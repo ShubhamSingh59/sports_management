@@ -6,11 +6,18 @@ function TableData() {
   const { tableName } = useParams();
   const [data, setData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
-  const [columnsName, setColumns] = useState([]) ;
+  const [columnsName, setColumns] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+
   useEffect(() => {
     fetchData();
     checkAdminStatus(); // Check if the user is an admin
   }, [tableName]);
+
+  useEffect(() => {
+    filterData();
+  }, [searchQuery, data]);
 
   const fetchData = async () => {
     try {
@@ -33,6 +40,7 @@ function TableData() {
     }
   };
 
+  
   const checkAdminStatus = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -46,6 +54,20 @@ function TableData() {
       console.error('Error checking admin status:', error);
     }
   };
+
+  const filterData = () => {
+    if (!searchQuery) {
+      setFilteredData(data);
+    } else {
+      const filtered = data.filter((row) =>
+        Object.values(row).some((value) =>
+          value && value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+      setFilteredData(filtered);
+    }
+  };
+  
 
   const renderCellValue = (value) => {
     if (isValidUrl(value)) {
@@ -61,32 +83,37 @@ function TableData() {
 
   return (
     <div className="table-container">
-  <h1>{tableName}</h1> {/* Convert tableName to uppercase */}
-  {isAdmin && ( // Render buttons only if the user is an admin
-    <div className="button-container">
-      <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
-      <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
-      <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
-      <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
-      <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
+      <h1>{tableName}</h1>
+    
+        {isAdmin && ( 
+        <div className="button-container">
+          <Link to={`/table/${tableName}/insert`} className="insert-button">Insert Data</Link>
+          <Link to={`/table/${tableName}/delete`} className="delete-button">Delete Data</Link>
+          <Link to={`/table/${tableName}/update`} className="update-button">Update Data</Link>
+          <Link to={`/table/${tableName}/rename`} className="rename-button">Rename Data</Link>
+          <Link to={`/table/${tableName}/where`} className="where-button">Where Clause</Link>
+        </div>
+      )}
+       
+      <div className="search-container">
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
     </div>
 
-
-
-      )}
-
       <table>
-      <thead>
-        <tr>
-          {columnsName.length > 0 &&
-            columnsName.map((columnName, index) => ( // Use columnsName.map() here
-              <th key={index}>{columnName}</th> // Use columnName instead of columnsName
+        <thead>
+          <tr>
+            {columnsName.map((columnName, index) => (
+              <th key={index}>{columnName}</th>
             ))}
-        </tr>
-      </thead>
-
+          </tr>
+        </thead>
         <tbody>
-          {data.map((row, index) => (
+          {filteredData.map((row, index) => (
             <tr key={index}>
               {Object.values(row).map((value, index) => (
                 <td key={index}>{renderCellValue(value)}</td>

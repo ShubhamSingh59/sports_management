@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 
 import jwt
 import datetime
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ app.config['MYSQL_HOST'] = config.MYSQL_HOST
 #app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
 app.config['MYSQL_DB'] = config.MYSQL_DB
 app.config['SECRET_KEY'] = config.SECRET_KEY
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=180)
 
 mysql = MySQL(app)
 
@@ -139,6 +141,25 @@ def get_tables():
         return jsonify({'error': str(e)}), 500
 
 
+
+@app.route('/api/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    current_user_email = get_jwt_identity()
+    cursor = mysql.connection.cursor()
+    player_query = "SELECT * FROM Player WHERE Email = %s"
+    coach_query = "SELECT * FROM Coach WHERE Email = %s"
+    cursor.execute(player_query, (current_user_email,))
+    player = dict_cursor(cursor)
+    if player:
+        cursor.close()
+        return jsonify({'type': 'player', 'data': player}), 200
+    cursor.execute(coach_query, (current_user_email,))
+    coach = dict_cursor(cursor)
+    cursor.close()
+    if coach:
+        return jsonify({'type': 'coach', 'data': coach}), 200
+    return jsonify({'error': 'User not found'}), 404
 
 
 @app.route('/api/insert', methods=['POST'])
