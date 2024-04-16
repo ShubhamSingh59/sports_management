@@ -91,7 +91,7 @@ function Update() {
           }
         }
       }
-
+  
       const selectedColumnPattern = columnRegex[selectedColumn];
       
       // Check if the update value matches the regex pattern for the selected column
@@ -113,20 +113,23 @@ function Update() {
           primary_key: rowData
         })
       });
-
-      
-
+  
       const data = await response.json();
+      console.log(data);
       if (data.error) {
-        throw new Error(data.error);
+        if (data.error.includes('lock')) { // Check if the error message contains 'lock'
+          throw new Error('Database lock error. Please try again later.');
+        } else {
+          throw new Error(data.error);
+        }
       }
-
+  
       setUpdated(true); // Update status to trigger success message and page refresh
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
-
+  
   return (
     <div className="update-container">
       <h2>Update Data in {tableName}</h2>

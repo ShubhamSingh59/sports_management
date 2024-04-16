@@ -13,6 +13,9 @@ import Where from './Components/Where';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
 import Profile from './Components/Profile';
+import GoogleLogin from './Components/GoogleSignbutton';
+import Googlefront from './Components/GoogleSignin';
+
 
 function App() {
   return (
@@ -47,6 +50,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/google" element={<Googlefront />} />
           </Routes>
         </div>
        

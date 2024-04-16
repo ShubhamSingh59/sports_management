@@ -10,10 +10,16 @@ import jwt
 import datetime
 from datetime import timedelta
 from flask_mail import Mail, Message
+from authlib.integrations.flask_client import OAuth
+
 
 app = Flask(__name__)
 CORS(app)
 mail = Mail(app)
+
+app.config['SERVER_NAME'] = 'localhost:5000'
+oauth = OAuth(app)
+app.secret_key = config.SECRET_KEY
 
 # configuration of mail 
 app.config['MAIL_SERVER']= config.MAIL_SERVER
@@ -77,6 +83,9 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
+
+
 def valid_token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -112,6 +121,33 @@ def check_notification(players_not_returned):
             return True,player
     return False,[]
 
+
+@app.route('/google/')
+def google():
+    GOOGLE_CLIENT_ID = config.CLIENT_ID
+    GOOGLE_CLIENT_SECRET = config.CLIENT_SECRET
+     
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+    oauth.register(
+        name='google',
+        client_id=GOOGLE_CLIENT_ID,
+        client_secret=GOOGLE_CLIENT_SECRET,
+        server_metadata_url=CONF_URL,
+        client_kwargs={
+            'scope': 'openid email profile'
+        }
+    )
+     
+    # Redirect to google_auth function
+    redirect_uri = url_for('google_auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+ 
+@app.route('/google/auth/')
+def google_auth():
+    token = oauth.google.authorize_access_token()
+    user = oauth.google.parse_id_token(token)
+    print(" Google User ", user)
+    return jsonify({'all set bro'}), 200
 
 
 def get_players_not_returned():
@@ -238,24 +274,42 @@ def get_tables():
         return jsonify({'error': str(e)}), 500
 
 
-
 @app.route('/api/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
     current_user_email = get_jwt_identity()
     cursor = mysql.connection.cursor()
-    player_query = "SELECT * FROM Player WHERE Email = %s"
-    coach_query = "SELECT * FROM Coach WHERE Email = %s"
+
+    # Query for fetching player profile with team information
+    player_query = """
+        SELECT p.*, t.Team_ID
+        FROM Player p
+        LEFT JOIN belongs_to b ON p.Player_ID = b.Player_ID
+        LEFT JOIN Team t ON b.Team_ID = t.Team_ID
+        WHERE p.Email = %s
+    """
     cursor.execute(player_query, (current_user_email,))
     player = dict_cursor(cursor)
+
     if player:
         cursor.close()
         return jsonify({'type': 'player', 'data': player}), 200
+
+    # Query for fetching coach profile with team and sports information
+    coach_query = """
+        SELECT c.*, t.Team_ID, t.Team_Name, t.Sports_Name
+        FROM Coach c
+        LEFT JOIN guide_of g ON c.Coach_ID = g.Coach_ID
+        LEFT JOIN Team t ON g.Team_ID = t.Team_ID
+        WHERE c.Email = %s
+    """
     cursor.execute(coach_query, (current_user_email,))
     coach = dict_cursor(cursor)
     cursor.close()
+
     if coach:
         return jsonify({'type': 'coach', 'data': coach}), 200
+
     return jsonify({'error': 'User not found'}), 404
 
 
@@ -279,7 +333,27 @@ def insert_data():
         return jsonify({'message': 'Data inserted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+import logging
 
+# Set up logging configuration
+logging.basicConfig(level=logging.DEBUG)
+
+def lock_table(table_name, lock_type):
+    cursor = mysql.connection.cursor()
+    cursor.execute(f"LOCK TABLES {table_name} {lock_type}")
+    cursor.close()
+    logging.debug(f"Table {table_name} locked successfully")
+
+def unlock_tables():
+    cursor = mysql.connection.cursor()
+    cursor.execute("UNLOCK TABLES")
+    cursor.close()
+    logging.debug("Tables unlocked successfully")
+
+
+
+from pymysql.err import OperationalError
 
 @app.route('/api/update', methods=['PUT'])
 @jwt_required()
@@ -294,25 +368,29 @@ def update_data():
 
         set_clause = ', '.join([f"{column} = %s" for column in column_names])
         where_clause = ' AND '.join([f"{column} = %s" for column in where_values.keys()])
-
         cursor = mysql.connection.cursor()
+
+        # Acquire a WRITE lock for the table
+        lock_table(table_name, 'WRITE')
+
         select_query = f"SELECT * FROM {table_name} WHERE {where_clause}"
         cursor.execute(select_query, tuple(where_values.values()))
         rows = cursor.fetchall()
 
         if not rows:
             return jsonify({'error': 'No entry found for updating'}), 404
-
+        #lock_table(table_name, 'Read')
         update_query = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
         cursor.execute(update_query, tuple(update_values + list(where_values.values())))
         mysql.connection.commit()
         cursor.close()
-
+        unlock_tables()  # Unlock the table after the operation
         return jsonify({'message': 'Data updated successfully'}), 200
+    except OperationalError as e:
+        return jsonify({'error': 'Database lock error. Please try again later.'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    
 # Update the /api/delete route to accept any combination of attribute values
 
 @app.route('/api/delete', methods=['DELETE'])
