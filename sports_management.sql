@@ -131,10 +131,9 @@ CREATE TABLE Competition (
     FOREIGN KEY (Team2_ID) REFERENCES Team(Team_ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
 CREATE TABLE Users (
-    username VARCHAR(50) PRIMARY KEY UNIQUE,
+    useremail VARCHAR(50) PRIMARY KEY UNIQUE,
     password VARCHAR(50),
-    role VARCHAR(50)
+    role VARCHAR(50),
+    CONSTRAINT chk_email_format CHECK (useremail REGEXP '^[^\s@]+@iitgn\.ac\.in$')
 );
-
