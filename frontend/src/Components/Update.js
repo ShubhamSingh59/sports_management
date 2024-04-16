@@ -91,6 +91,14 @@ function Update() {
           }
         }
       }
+
+      const selectedColumnPattern = columnRegex[selectedColumn];
+      
+      // Check if the update value matches the regex pattern for the selected column
+      if (!selectedColumnPattern.test(updateValue)) {
+        alert(`Invalid value for update value ${selectedColumn}`)
+        throw new Error(`Invalid value for update value ${selectedColumn}`);
+      }
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/update', {
         method: 'PUT',
@@ -148,7 +156,6 @@ function Update() {
               onChange={handleInputChange}
             />
           </div>
-          {/* Input field for the update value */}
           <div>
             <label>Update Value:</label>
             <input

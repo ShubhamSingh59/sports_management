@@ -89,6 +89,7 @@ function Insert() {
       for (const column in rowData) {
         if (columnRegex.hasOwnProperty(column)) {
           if (!columnRegex[column].test(rowData[column])) {
+            alert(`Invalid value for ${column}`)
             throw new Error(`Invalid value for column ${column}`);
           }
         }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; 
-import { FaHome, FaSignInAlt, FaUserPlus, FaUser } from 'react-icons/fa'; // Import FaUser for profile icon
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { FaHome, FaSignInAlt, FaUserPlus, FaUser } from 'react-icons/fa';
 import './App.css';
 
-import HomePage from './Components/Homepage'; 
-import TableData from './Components/Table'; 
+import HomePage from './Components/Homepage';
+import TableData from './Components/Table';
 import Insert from './Components/Insert';
 import Delete from './Components/Delete';
 import Update from './Components/Update';
@@ -21,24 +21,24 @@ function App() {
         <header className="App-header">
           <nav className="navbar">
             <Link to="/" className="home-link">
-              <FaHome className="home-icon" /> {/* Home icon */}
+              <FaHome className="home-icon" />
             </Link>
             <h1>Sports Management Application</h1>
-            <Link to="/profile" className="home-link"> {/* Link to Profile component */}
-              <FaUser className="profile-icon" /> {/* Profile icon */}
+            <Link to="/profile" className="home-link">
+              <FaUser className="profile-icon" />
             </Link>
             <Link to="/login" className="home-link">
-              <FaSignInAlt className="login-icon" /> {/* Login icon */}
+              <FaSignInAlt className="login-icon" />
             </Link>
             <Link to="/signup" className="home-link">
-              <FaUserPlus className="signup-icon" /> {/* Signup icon */}
+              <FaUserPlus className="signup-icon" />
             </Link>
           </nav>
         </header>
         <div>
-          <Routes> 
-            <Route exact path="/" element={<HomePage />} /> {/* Use element prop */}
-            <Route path="/table/:tableName" element={<div> <TableData /> </div>} /> {/* Use element prop */}
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route path="/table/:tableName" element={<div> <TableData /> </div>} />
             <Route path="/table/:tableName/insert" element={<Insert />} />
             <Route path="/table/:tableName/delete" element={<Delete />} />
             <Route path="/table/:tableName/update" element={<Update />} />
@@ -49,6 +49,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
+       
       </div>
     </Router>
   );

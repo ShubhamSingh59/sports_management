@@ -9,10 +9,19 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 import jwt
 import datetime
 from datetime import timedelta
-
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 CORS(app)
+mail = Mail(app)
+
+# configuration of mail 
+app.config['MAIL_SERVER']= config.MAIL_SERVER
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'choudharynetram@iitgn.ac.in'
+app.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 app.config['MYSQL_HOST'] = config.MYSQL_HOST
 #app.config['MYSQL_USER'] = config.MYSQL_USER
@@ -93,6 +102,94 @@ def valid_token_required(f):
 def admin_only_endpoint():
     return jsonify({'message': 'Admin endpoint'}), 200
 
+
+# Function to check if a notification should be shown to the user
+def check_notification(players_not_returned):
+    current_user_email = get_jwt_identity()
+    for player in players_not_returned:
+        if player[6] == current_user_email:
+            # Show notification to user
+            return True,player
+    return False,[]
+
+
+
+def get_players_not_returned():
+        # Connect to the database and query for players who haven't returned their equipment
+        app.config['MYSQL_USER'] = config.MYSQL_USER
+        app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+        cursor = mysql.connection.cursor()
+        query = """
+        SELECT p.*, i.Player_ID, i.Return_Status, i.Equipment_Name
+        FROM Player p
+        INNER JOIN Issue i ON p.Player_ID = i.Player_ID
+        WHERE i.Return_Status = 'Not Returned'
+        GROUP BY p.Player_ID, i.Player_ID, i.Return_Status, i.Equipment_Name
+        """
+        cursor.execute(query)
+        players_not_returned = cursor.fetchall()
+        cursor.close()
+
+        return players_not_returned
+    
+
+@app.route('/send-reminder', methods=['GET'])
+@jwt_required()
+def sendReminder():
+    players_not_returned = get_players_not_returned()
+    Not_Returned , loggedInPlayerdata =  check_notification(players_not_returned)
+    if Not_Returned:
+        return jsonify({'show_notification': True, 'player_data':loggedInPlayerdata} ), 200 
+    else :
+        return jsonify({'show_notification': False, 'player_data':loggedInPlayerdata} ), 200 
+    
+
+# # Function to check equipment returns and send notifications
+# @jwt_required()
+# def send_return_reminders():
+#     try:
+#         # Connect to the database and query for overdue equipment returns
+#         app.config['MYSQL_USER'] = config.MYSQL_USER
+#         app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+#         cursor = mysql.connection.cursor()
+#         query = """
+#             SELECT p.First_Name, p.Last_Name, p.Email, i.Equipment_Name
+#             FROM Issue i
+#             INNER JOIN Player p ON i.Player_ID = p.Player_ID
+#             WHERE i.Return_Status = 'Not Returned'
+#             AND i.Date_Time < DATE_SUB(NOW(), INTERVAL 2 DAY)
+#         """
+#         cursor.execute(query)
+#         overdue_equipment = cursor.fetchall()
+#         print(overdue_equipment)
+#         # Send email notifications to players with overdue equipment returns
+#         for player in overdue_equipment:
+#             send_notification_email(player[2], player[0], player[1], player[3])
+        
+#         cursor.close()
+#     except Exception as e:
+#         print("Error sending return reminders:", e)
+
+# # Function to send notification email
+# def send_notification_email(email, first_name, last_name, equipment_name):
+#     try:
+#         msg = Message( 
+#                         'Equipment Return Reminder', 
+#                         sender = config.MAIL_USERNAME, 
+#                         recipients = [email] 
+#                     ) 
+#         msg.body = f"Dear {first_name} {last_name},\n\nThis is a reminder to return the equipment '{equipment_name}' as soon as possible.\n\nThank you.\nSports Management Team"
+#         print(email)
+#         mail.send(msg) 
+#         return 'Sent'
+#     except Exception as e:
+#         print("Error sending email notification:", e)
+
+# # Expose an endpoint to trigger the notification process
+# @app.route('/api/send-return-reminders', methods=['POST'])
+# def trigger_return_reminders():
+#     send_return_reminders()
+#     return jsonify({'message': 'Return reminders sent successfully'}), 200
 
 
 @app.route('/')

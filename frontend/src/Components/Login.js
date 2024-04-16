@@ -14,9 +14,10 @@ const Login = () => {
       const upperCaseRegex = /[A-Z]/;
       const numericRegex = /\d/;
       const minLength = 8;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@iitgn\.ac\.in$/;
+
       if (!emailRegex.test(useremail)) {
-        setError('Invalid email format');
+        alert('Invalid email, It should be an IITGN Email');
         return;
       }
       if (!lowerCaseRegex.test(password)) {
@@ -30,12 +31,12 @@ const Login = () => {
       }
 
       if (!numericRegex.test(password)) {
-        setError('Password should contain at least one numeric digit.');
+        alert('Password should contain at least one numeric digit.');
         return;
       }
 
       if (password.length < minLength) {
-        setError(`Password should have a minimum length of ${minLength} characters.`);
+        alert(`Password should have a minimum length of ${minLength} characters.`);
         return;
       }
 
@@ -46,10 +47,11 @@ const Login = () => {
       });
       console.log(response.data.success);
       if(response.data.success === false){
-        setError("we couldn't find your credianls in our system, Please login via correct email, password") ; 
+        alert("we couldn't find your credianls in our system, Please login via correct email, password") ; 
         return ; 
       }
       const token = response.data.token;
+      alert("Login successfully")
       // Store the token in local storage or session storage
       localStorage.setItem('token', token);
       // Redirect to the desired page after successful login
