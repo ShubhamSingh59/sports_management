@@ -1,5 +1,6 @@
 CREATE DATABASE sports_management;
 -- Use the newly created database
+-- drop database sports_management;
 USE sports_management;
 
 -- Create Player table
@@ -137,3 +138,4 @@ CREATE TABLE Users (
     role VARCHAR(50),
     CONSTRAINT chk_email_format CHECK (useremail REGEXP '^[^\s@]+@iitgn\.ac\.in$')
 );
+Select * from Users;

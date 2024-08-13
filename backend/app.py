@@ -22,10 +22,10 @@ oauth = OAuth(app)
 app.secret_key = config.SECRET_KEY
 
 # configuration of mail 
-app.config['MAIL_SERVER']= config.MAIL_SERVER
+#app.config['MAIL_SERVER']= config.MAIL_SERVER
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'choudharynetram@iitgn.ac.in'
-app.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
+app.config['MAIL_USERNAME'] = 'subhams@iitgn.ac.in'
+#app.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
@@ -498,6 +498,9 @@ def create_user():
         app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
         cur = mysql.connection.cursor()
         data = request.get_json()
+        print(config.MYSQL_USER)
+        print(config.MYSQL_PASSWORD)
+        print(data)
         useremail = data['useremail']
         password = data['password']
         role = data.get('role')  # Get the role from the request data
