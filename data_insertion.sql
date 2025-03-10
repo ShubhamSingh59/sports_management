@@ -426,6 +426,6 @@ VALUES
 ('Golf Club', 'Golf', 102141, '2024-06-09 10:45:00', 1, 'Not Returned'),
 ('Swimming Goggles', 'Swimming', 102444, '2024-06-10 12:00:00', 1, 'Not Returned');
 
-Select * from users;
+
 
 
